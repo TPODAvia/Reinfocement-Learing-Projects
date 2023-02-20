@@ -1,0 +1,6 @@
+my_ws/build/
+my_ws/devel/
+my_ws/CMakeLists.txt
+CMakeLists.txt.user
+CMakeLists.txt.user.*
+CMakeLists.txt
