@@ -1,4 +1,5 @@
 my_ws/build/
+/.venv
 my_ws/devel/
 my_ws/CMakeLists.txt
 CMakeLists.txt.user

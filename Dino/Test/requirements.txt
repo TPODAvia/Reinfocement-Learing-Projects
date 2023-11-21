@@ -1,0 +1,10 @@
+mss
+pydirectinput
+opencv-python
+numpy
+pytesseract
+matplotlib
+gymnasium
+stable_baselines3
+tensorboard
+stable-baselines3[extra]

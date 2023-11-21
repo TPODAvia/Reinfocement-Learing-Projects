@@ -1,0 +1,10 @@
+my_ws/build/
+/.venv
+my_ws/devel/
+my_ws/CMakeLists.txt
+CMakeLists.txt.user
+CMakeLists.txt.user.*
+CMakeLists.txt
+/ml-agents-develop
+breakout.zip
+/data_atari_seq
