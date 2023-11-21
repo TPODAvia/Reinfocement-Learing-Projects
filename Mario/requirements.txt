@@ -37,9 +37,9 @@ sympy==1.11.1
 tensordict==0.1.2
 # torch==2.0.1+cu118
 # torchaudio==2.0.2+cu118
-torchrl==0.1.1
+torchrl
 # torchvision==0.15.2+cu118
 tqdm==4.66.1
-triton==2.0.0
+# triton
 typing_extensions==4.4.0
 urllib3==1.26.13
