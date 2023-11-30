@@ -2,9 +2,17 @@ import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
 import sys
-# import gymnasium
+import gymnasium  # Replace gym with gymnasium
+from ncps.torch import CfC
+import ale_py
+from ray.rllib.env.wrappers.atari_wrappers import wrap_deepmind
+import numpy as np
+import torch
+from torch.utils.data import Dataset
+import torch.optim as optim
+from ncps.datasets.torch import AtariCloningDataset
 # pip install dm_tree
-# pip install gym[accept-rom-license]
+# pip install gymnasium[accept-rom-license]  # Replace gym with gymnasium
 # pip install ale-py
 
 class ConvBlock(nn.Module):
@@ -24,10 +32,6 @@ class ConvBlock(nn.Module):
         x = F.relu(self.bn4(self.conv4(x)))
         x = x.mean((-1, -2))  # Global average pooling
         return x
-    
-
-
-from ncps.torch import CfC
 
 class ConvCfC(nn.Module):
     def __init__(self, n_actions):
@@ -45,26 +49,6 @@ class ConvCfC(nn.Module):
         x = x.view(batch_size, seq_len, *x.shape[1:])
         x, hx = self.rnn(x, hx)  # hx is the hidden state of the RNN
         return x, hx
-    
-import gym
-import ale_py
-from ray.rllib.env.wrappers.atari_wrappers import wrap_deepmind
-import numpy as np
-
-env = gym.make("ALE/Breakout-v5")
-# We need to wrap the environment with the Deepmind helper functions
-env = wrap_deepmind(env)
-import torch
-from torch.utils.data import Dataset
-import torch.optim as optim
-from ncps.datasets.torch import AtariCloningDataset
-
-train_ds = AtariCloningDataset("breakout", split="train")
-val_ds = AtariCloningDataset("breakout", split="val")
-trainloader = torch.utils.data.DataLoader(
-    train_ds, batch_size=32, num_workers=4, shuffle=True
-)
-valloader = torch.utils.data.DataLoader(val_ds, batch_size=32, num_workers=4)
 
 def run_closed_loop(model, env, num_episodes=None):
     obs = env.reset()
@@ -141,6 +125,16 @@ def eval(model, valloader):
             accs.append(acc.item())
     return np.mean(losses), np.mean(accs)
 
+env = gymnasium.make("ALE/Breakout-v5")
+# We need to wrap the environment with the Deepmind helper functions
+env = wrap_deepmind(env)
+
+train_ds = AtariCloningDataset("breakout", split="train")
+val_ds = AtariCloningDataset("breakout", split="val")
+trainloader = torch.utils.data.DataLoader(
+    train_ds, batch_size=32, num_workers=4, shuffle=True
+)
+valloader = torch.utils.data.DataLoader(val_ds, batch_size=32, num_workers=4)
 
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # model = ConvCfC(n_actions=env.action_space.n).to(device)
@@ -190,6 +184,6 @@ if __name__ == "__main__":
     #     print(f"Mean return {np.mean(returns)} (n={len(returns)})")
 
     # Visualize Atari game and play endlessly
-    env = gym.make("ALE/Breakout-v5", render_mode="human")
+    env = gymnasium.make("ALE/Breakout-v5", render_mode="human")
     env = wrap_deepmind(env)
     run_closed_loop(model, env)
