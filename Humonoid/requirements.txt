@@ -3,3 +3,4 @@ mujoco-py == 2.1.2.14
 gym >= 0.21.3
 numpy >= 1.19.5
 torch >=1.9.0
+scikit-image
