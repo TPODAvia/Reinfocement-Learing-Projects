@@ -1,5 +1,5 @@
 ## Installation
-
+  
 To install the Emotional Offline Voice Assistant, follow these steps:
 
 1. Clone the repository:
